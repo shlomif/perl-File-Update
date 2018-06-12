@@ -51,6 +51,15 @@ sub write_on_change_no_utf8
 
 File::Update - update/modify/mutate a file only on change in contents.
 
+=head1 SYNOPSIS
+
+    use Path::Tiny qw/ path /;
+    use File::Update qw/ write_on_change /;
+
+    my $text = "Updated on " . strftime("%Y-%m-%d", time) . "\n";
+
+    write_on_change(path("dated-file.txt"), \$text);
+
 =head1 FUNCTIONS
 
 =head2 write_on_change($path, \"new contents")
