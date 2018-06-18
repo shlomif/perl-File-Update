@@ -2,9 +2,9 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Path::Tiny qw/ path /;
-use File::Update qw/ write_on_change /;
+use File::Update qw/ modify_on_change write_on_change /;
 
 {
     my $dir = Path::Tiny->tempdir;
@@ -28,4 +28,9 @@ use File::Update qw/ write_on_change /;
 
     # TEST
     is_deeply( [ $f->slurp_utf8 ], ["second text"], "updated text" );
+
+    modify_on_change( $f, sub { return ${ shift() } =~ s/second/third/; } );
+
+    # TEST
+    is_deeply( [ $f->slurp_utf8 ], ["third text"], "modify_on_change" );
 }
