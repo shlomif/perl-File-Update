@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Path::Tiny qw/ path /;
 use File::Update qw/ write_on_change /;
 
@@ -23,4 +23,9 @@ use File::Update qw/ write_on_change /;
 
     # TEST
     is( $f->stat->mtime, $mtime, "mtime did not change" );
+
+    write_on_change( $f, \"second text" );
+
+    # TEST
+    is_deeply( [ $f->slurp_utf8 ], ["second text"], "updated text" );
 }
