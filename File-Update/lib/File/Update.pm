@@ -60,6 +60,21 @@ File::Update - update/modify/mutate a file only on change in contents.
 
     write_on_change(path("dated-file.txt"), \$text);
 
+
+    use Path::Tiny qw/ path /;
+    use File::Update qw/ modify_on_change /;
+
+    foreach my $fn (@ARGV)
+    {
+        modify_on_change(
+            path($fn),
+            sub {
+                my $text = shift;
+                return $$text =~ s{\A#!/usr/bin/perl}{#!/usr/bin/env perl};
+            }
+        );
+    }
+
 =head1 FUNCTIONS
 
 =head2 write_on_change($path, \"new contents")
