@@ -5,7 +5,9 @@ use warnings;
 
 use parent 'Exporter';
 
-our @EXPORT_OK = (qw(modify_on_change write_on_change write_on_change_no_utf8));
+our @EXPORT_OK = (
+    qw(modify_on_change write_on_change write_on_change_raw write_on_change_no_utf8)
+);
 
 sub write_on_change
 {
@@ -40,6 +42,18 @@ sub write_on_change_no_utf8
     if ( ( !-e $io ) or ( $io->slurp() ne $$text_ref ) )
     {
         $io->spew($$text_ref);
+    }
+
+    return;
+}
+
+sub write_on_change_raw
+{
+    my ( $io, $text_ref ) = @_;
+
+    if ( ( !-e $io ) or ( $io->slurp_raw() ne $$text_ref ) )
+    {
+        $io->spew_raw($$text_ref);
     }
 
     return;
@@ -93,4 +107,9 @@ to the file.
 
 Like write_on_change() but while using L<Path::Tiny>'s non-utf8 methods.
 
+=head2 write_on_change_raw($path, \"new contents")
+
+Like write_on_change() but while using L<Path::Tiny>'s C<*_raw> methods.
+
+Added in v0.2.0.
 =cut
